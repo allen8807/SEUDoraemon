@@ -1,0 +1,20 @@
+#ifndef __GYRO_H
+#define __GYRO_H
+
+typedef signed short int16_t;
+
+extern float 	yaw,  //偏航角
+		pitch,//俯仰
+		roll, //滚转
+		alt,  //高度
+		tempr,//温度
+		press;//气压
+//ADC值
+int16_t ax, ay, az;//加速度计
+int16_t gx, gy, gz;//陀螺仪
+int16_t hx, hy, hz;//磁力计
+
+extern void USART2_IRQHandler(void); //接收中断子程序
+extern void UART2_CommandRoute(void);
+
+#endif

@@ -1,0 +1,255 @@
+qianqi_zbl_1
+qianqi_zbl_1 1.1 0 0 qianqi_zbl_2 0
+
+qianqi_zbl_2
+qianqi_zbl_2 1.1 0 0 qianqi_zbl_3 0
+
+qianqi_zbl_3
+qianqi_zbl_3 1.1 0 0 qianqi_zbl_4 0
+
+qianqi_zbl_4
+qianqi_zbl_4 1.1 0 0 qianqi_zbl_5 0
+
+qianqi_zbl_5
+qianqi_zbl_5 1.1 0 0 qianqi_zbl_6 0
+
+qianqi_zbl_6
+qianqi_zbl_6 1.1 0 0 null 0
+
+;squat_zbl_1
+squat_zbl_1 1.1 0 0 squat_zbl_2 0
+
+squat_zbl_2
+squat_zbl_2 1.1 0 0 squat_zbl_3 0
+
+squat_zbl_3
+squat_zbl_3 1.1 0 0 squat_zbl_4 0
+
+squat_zbl_4
+squat_zbl_4 0.6 0 0 squat_zbl_5 0
+
+squat_zbl_5
+squat_zbl_5 0.6 0 0 squat_zbl_6 0
+
+squat_zbl_6
+squat_zbl_6 0.6 0 0 null 0
+
+houqi_zbl_1
+houqi_zbl_1 1.1 0 0 houqi_zbl_2 0
+
+houqi_zbl_2
+houqi_zbl_2 1.1 0 0 houqi_zbl_3 0
+
+houqi_zbl_3
+houqi_zbl_3 1.1 0 0 houqi_zbl_4 0
+
+houqi_zbl_4
+houqi_zbl_4 1.1 0 0 houqi_zbl_5 0
+
+houqi_zbl_5
+houqi_zbl_5 1.1 0 0 houqi_zbl_6 0
+
+houqi_zbl_6
+houqi_zbl_6 1.1 0 0 houqi_zbl_7 0
+
+houqi_zbl_7
+houqi_zbl_7 1.1 0 0 houqi_zbl_8 0
+
+houqi_zbl_8
+houqi_zbl_8 1.1 0 0 null 0
+
+roll_zbl_1
+roll_zbl_1 0.3 0 0 roll_zbl_2 0
+
+roll_zbl_2
+roll_zbl_2 0.3 0 0 roll_zbl_3 0
+
+roll_zbl_3
+roll_zbl_3 0.3 0 0 roll_zbl_4 0
+
+roll_zbl_4
+roll_zbl_4 0.3 0 0 roll_zbl_5 0
+
+roll_zbl_5
+roll_zbl_5 0.3 0 0 roll_zbl_6 0
+
+roll_zbl_6
+roll_zbl_6 0.3 0 0 roll_zbl_7 0
+
+roll_zbl_7
+roll_zbl_7 0.3 0 0 roll_zbl_8 0
+
+roll_zbl_8
+roll_zbl_1 0.3 0 0 null 0
+
+walk_zbl_1
+walk_zbl_1 0.2 0 0 walk_zbl_2 0
+
+walk_zbl_2
+walk_zbl_2 0.2 0 0 walk_zbl_3 0
+
+walk_zbl_3
+walk_zbl_3 0.2 0 0 walk_zbl_4 0
+
+walk_zbl_4
+walk_zbl_4 0.2 0 0 walk_zbl_5 0
+
+walk_zbl_5
+walk_zbl_5 0.14 0 0 walk_zbl_6 0
+
+walk_zbl_6
+walk_zbl_6 0.2 0 0 walk_zbl_7 0
+
+walk_zbl_7
+walk_zbl_7 0.2 0 0 walk_zbl_8 0
+
+walk_zbl_8
+walk_zbl_8 0.2 0 0 walk_zbl_9 0
+
+walk_zbl_9
+walk_zbl_9 0.2 0 0 walk_zbl_10 0
+
+walk_zbl_10
+walk_zbl_10 0.14 0 0 walk_zbl_11 0
+
+walk_zbl_11
+walk_zbl_11 0.2 0 0 walk_zbl_13 0
+
+walk_zbl_12
+walk_zbl_12 0.2 0 0 walk_zbl_13 0
+
+walk_zbl_13
+walk_zbl_13 0.2 0 0 walk_zbl_14 0
+
+walk_zbl_14
+walk_zbl_14 0.2 0 0 null 0
+
+
+
+turn_left_1
+turn_left_1 0.2 0 0 turn_left_2 0
+
+turn_left_2
+turn_left_2 0.2 0 0 turn_left_3 0
+
+turn_left_3
+turn_left_3 0.2 0 0 turn_left_4 0
+
+turn_left_4
+turn_left_4 0.1 0 0 turn_left_5 0
+
+turn_left_5
+turn_left_5 0.14 0 0 turn_left_6 0
+
+turn_left_6
+turn_left_6 0.2 0 0 turn_left_7 0
+
+turn_left_7
+turn_left_7 0.2 0 0 turn_left_8 0
+
+turn_left_8
+turn_left_8 0.1 0 0 turn_left_9 0
+
+turn_left_9
+turn_left_9 0.1 0 0 turn_left_10 0
+
+turn_left_10
+turn_left_10 0.14 0 0 turn_left_11 0
+
+turn_left_11
+turn_left_11 0.2 0 0 turn_left_13 0
+
+turn_left_12
+turn_left_12 0.2 0 0 turn_left_13 0
+
+turn_left_13
+turn_left_13 0.2 0 0 turn_left_14 0
+
+turn_left_14
+turn_left_14 0.1 0 0 null 0
+
+turn_right_1
+turn_right_1 0.2 0 0 turn_right_2 0
+
+turn_right_2
+turn_right_2 0.2 0 0 turn_right_3 0
+
+turn_right_3
+turn_right_3 0.2 0 0 turn_right_4 0
+
+turn_right_4
+turn_right_4 0.2 0 0 turn_right_5 0
+
+turn_right_5
+turn_right_5 0.14 0 0 turn_right_6 0
+
+turn_right_6
+turn_right_6 0.2 0 0 turn_right_7 0
+
+turn_right_7
+turn_right_7 0.2 0 0 turn_right_8 0
+
+turn_right_8
+turn_right_8 0.2 0 0 turn_right_9 0
+
+turn_right_9
+turn_right_9 0.2 0 0 turn_right_10 0
+
+turn_right_10
+turn_right_10 0.14 0 0 turn_right_11 0
+
+turn_right_11
+turn_right_11 0.2 0 0 turn_right_13 0
+
+turn_right_12
+turn_right_12 0.2 0 0 turn_right_13 0
+
+turn_right_13
+turn_right_13 0.2 0 0 turn_right_14 0
+
+turn_right_14
+turn_right_14 0.2 0 0 null
+
+yuandi_left_1
+yuandi_left_1 0.2 0 0 yuandi_left_2 0
+
+yuandi_left_2
+yuandi_left_2 0.2 0 0 yuandi_left_3 0
+
+yuandi_left_3
+yuandi_left_3 0.2 0 0 yuandi_left_4 0
+
+yuandi_left_4
+yuandi_left_4 0.2 0 0 yuandi_left_5 0
+
+yuandi_left_5
+yuandi_left_5 0.2 0 0 yuandi_left_6 0
+
+yuandi_left_6
+yuandi_left_6 0.2 0 0 yuandi_left_7 0
+
+yuandi_left_7
+yuandi_left_6 0.2 0 0 null 0
+
+yuandi_right_1
+yuandi_right_1 0.2 0 0 yuandi_right_2 0
+
+yuandi_right_2
+yuandi_right_2 0.2 0 0 yuandi_right_3 0
+
+yuandi_right_3
+yuandi_right_3 0.2 0 0 yuandi_right_4 0
+
+yuandi_right_4
+yuandi_right_4 0.2 0 0 yuandi_right_5 0
+
+yuandi_right_5
+yuandi_right_5 0.2 0 0 yuandi_right_6 0
+
+yuandi_right_6
+yuandi_right_6 0.2 0 0 yuandi_right_7 0
+
+yuandi_right_7
+yuandi_right_6 0.2 0 0 null 0
+
+

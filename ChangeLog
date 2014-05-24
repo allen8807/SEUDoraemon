@@ -1,0 +1,113 @@
+2012-07-31 18:40 Zhao Bolu<zhaobl880704@gmail.com>
+ V0.1
+DoraemonV0.1
+研究生毕业论文
+
+2013-05-31 18:40 Liu Xiangxiao<liuxx416@gmail.com>
+V0.6.3
+intergratedBioloidV0.6.3
+毕业设计
+
+2012-07-31 18:40 Zhao Bolu<zhaobl880704@gmail.com>
+V0.6.2
+intergratedBioloidV0.6.2
+修正了main.cpp里陀螺仪传参问题。
+修改了make install，可以将可执行码和data文件夹install到bin目录下
+
+2012-07-31 15:50 Zhao Bolu<zhaobl880704@gmail.com>
+V0.6.1
+intergratedBioloidV0.6.1
+矫正了陀螺仪
+
+2012-07-31 12:30 Zhao Bolu<zhaobl880704@gmail.com>
+V0.6
+intergratedBioloidV0.6
+增加了camera处理和转向处理
+
+2012-07-31 11:00 Zhao Bolu<zhaobl880704@gmail.com>
+V0.5.4
+intergratedBioloidV0.5.4
+修改了状态判断的函数
+
+2012-07-31 10:00 Zhao Bolu<zhaobl880704@gmail.com> -
+V0.5.3
+intergratedBioloidV0.5.3
+将bioloid模块替换为V0.7版本
+
+2012-07-30 18:00 Zhao Bolu<zhaobl880704@gmail.com>
+V0.5.2
+intergratedBioloidV0.5.2
+修改了main.cpp，将初始化放到主线程里，因为发现串口和陀螺仪同时初始化会报段错误
+
+2012-07-30 18:00 Zhao Bolu<zhaobl880704@gmail.com>
+V0.5.1
+intergratedBioloidV0.5.1
+添加了data文件夹，程序执行时，可执行码与data文件夹应放在同一目录下
+
+2012-07-30 17:40 Zhao Bolu<zhaobl880704@gmail.com>
+V0.5
+intergratedBioloidV0.5
+增加了陀螺仪模块rmg
+
+2012-07-30 15:30 Zhao Bolu<zhaobl880704@gmail.com>
+V0.4.2
+intergratedBioloidV0.4.2
+修改了AX12_C3.cpp里RegSetPosition和Action函数中信息阻塞的代码
+
+2012-07-30 14:00 Zhao Bolu<zhaobl880704@gmail.com>
+V0.4.1
+intergratedBioloidV0.4.1
+修改了main.cpp里忘记初始化com3的bug
+
+2012-07-24 20:00 Zhao Bolu<zhaobl880704@gmail.com>
+V0.4
+intergratedBioloidV0.4
+将com模块更新，使之不会被未接收到舵机反馈信息而阻塞
+2012-07-21 23:20 Zhao Bolu<zhaobl880704@gmail.com>
+V0.3
+intergratedBioloidV0.3
+增加了camera模块，由于该模块是用C写的，C++调用时，注意添加
+#ifdef __cplusplus
+extern "C" {
+#endif
+/**
+*C的定义
+*
+*/
+#ifdef __cplusplus
+}
+#endif
+这样的定义
+2012-07-21 23:20 Zhao Bolu<zhaobl880704@gmail.com>
+V0.2
+intergratedBioloidV0.2
+调整了RoBoIO的文件位置结构
+
+2012-07-21 23:20 Zhao Bolu<zhaobl880704@gmail.com>
+V0.1
+intergratedBioloidV0.1
+将串口通讯模块com加入代码
+
+2012-07-21 18:20 Zhao Bolu<zhaobl880704@gmail.com>
+V0.5
+corebioloidV0.5
+将主程序改成多线程，使用pthread线程库
+现在主要为三个线程，姿态传感器线程，摄像头线程和控制线程
+增加设置控制周期的接口，但建议只调用一次
+
+2012-07-21 9:20 Zhao Bolu<zhaobl880704@gmail.com>
+V0.4
+corebioloidV0.4
+增加了根据身体状态调整使用序列的方法，这个应该是比赛的主要使用模式
+2012-07-19 14:00 Zhao Bolu<zhaobl880704@gmail.com>
+corebioloidV0.3
+修改了一些类变量，加了一些注释
+2012-07-10 16:00 Zhao Bolu<zhaobl880704@gmail.com>
+corebioloidV0.2
+修改了一些部分,考虑减小数据内存使用
+2012-07-10 13:30 Zhao Bolu<zhaobl880704@gmail.com>
+corebioloidV0.1
+bioloid核心模块控制程序
+main.cpp是测试程序
+bioloid目录下是模块代码
+rsg下为动作序列的机器人模型
