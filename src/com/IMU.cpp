@@ -36,7 +36,6 @@ int16_t imu_orig_hx, imu_orig_hy, imu_orig_hz;//磁力计
 */
 #include <stdio.h>
 #include "roboard.h"
-
 //uart reicer flag
 #define b_uart_head  0x80  //收到A5 头 标志位
 #define b_rx_over    0x40  //收到完整的帧标志
@@ -46,7 +45,7 @@ int16_t imu_orig_hx, imu_orig_hy, imu_orig_hz;//磁力计
 volatile unsigned char rx_buffer[RX_BUFFER_SIZE]; //接收数据缓冲区
 volatile unsigned char rx_wr_index; //缓冲写指针
 volatile unsigned char RC_Flag;  //接收状态标志字节
-
+//typedef int int16_t;
 float 	imu_calc_yaw,  //偏航角
 		imu_calc_pitch,//俯仰
 		imu_calc_roll, //滚转
@@ -252,21 +251,26 @@ unsigned char Sum_check(void)
   else
    return(0x00); //Checksum error
 }
-
+bool imu_is_update_imu;
+bool imu_is_update_motion;
 
 //--这个子程序需要在主程序中 定时调用,以检查 串口是否接收完一帧数据
 void UART2_CommandRoute(void)
 {
+     imu_is_update_imu=false;
+ imu_is_update_motion=false;
   if(RC_Flag&b_rx_over){  //已经接收完一帧?
 	RC_Flag&=~b_rx_over; //清标志先
 	if(Sum_check()){ 
 	//校验通过
 	  if(rx_buffer[1]==0xA1){ //UART2_ReportIMU 的数据
 // 	    printf("get IMU succ\n");
+              imu_is_update_imu=true;
 	    UART2_Get_IMU();	//取数据
 	  }
 	  if(rx_buffer[1]==0xA2){ //UART2_ReportMotion 的数据
 // 	    printf("get Motion succ\n");
+              imu_is_update_motion=true;
 	    UART2_Get_Motion();	 //取数据
 	  } 
 	

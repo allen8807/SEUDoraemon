@@ -1,0 +1,12 @@
+INCLUDE_DIRECTORIES(./)
+INCLUDE_DIRECTORIES(${DORA_SOURCE_DIR})
+SET(SRCS 
+DoraIMU.h
+DoraIMU.cpp
+DoraCamera.h
+DoraCamera.cpp
+) 
+ADD_LIBRARY( perception STATIC ${SRCS}  )
+TARGET_LINK_LIBRARIES(perception
+com
+)

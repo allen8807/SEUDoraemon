@@ -19,11 +19,11 @@
 #include"com/IMU.h"
 #include"camera/camera.h"
 #include"roboard.h"
-#include"localization/DoraIMU.h"
+#include"perception/DoraIMU.h"
 
 using namespace std;
 using namespace BioInterface;
-using namespace dora_localization;
+using namespace dora_perception;
 pthread_mutex_t camera_mutex;
 pthread_mutex_t posture_mutex;
 pthread_t camera_tid;
@@ -311,6 +311,7 @@ int main() {
 //       printf("ax:%d\n",ax);
 //	
         doraimu.update();
+        //doraimu.test();
         
     }
 
