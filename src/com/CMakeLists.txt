@@ -8,6 +8,8 @@ AD.cpp
 AD.h
 IMU.cpp
 IMU.h
+CommUnit.h
+CommUnit.cpp
 ) 
 ADD_LIBRARY( com STATIC ${SRCS}  )
 TARGET_LINK_LIBRARIES(com

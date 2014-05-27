@@ -8,9 +8,9 @@
 #ifndef DORAIMU_H
 #define	DORAIMU_H
 #include"seumath/Math.hpp"
+#include"core/DoraMutiThreadData.h"
 #include<ctime>
 namespace dora_perception {
-
     class DoraIMU {
     public:
         DoraIMU();
@@ -44,10 +44,8 @@ namespace dora_perception {
         //重力加速度g
         float mG;
         //向前走的平均速度
-        float mSpeedForward;
-        
+        float mSpeedForward;       
         bool mIsWalking;
-
     };
 }//namespace dora_perception 
 

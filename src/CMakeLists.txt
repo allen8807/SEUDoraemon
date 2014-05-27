@@ -5,17 +5,18 @@ INCLUDE_DIRECTORIES(./libs)
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/libs/RoBoIO/LINUX)
 ADD_SUBDIRECTORY( com )
 ADD_SUBDIRECTORY( perception )
-ADD_SUBDIRECTORY( camera )
-ADD_SUBDIRECTORY( rmg )
+ADD_SUBDIRECTORY( action )
+#ADD_SUBDIRECTORY( camera )
 ADD_SUBDIRECTORY( bioloid )
+ADD_SUBDIRECTORY( core )
 INCLUDE_DIRECTORIES(./)
 ADD_EXECUTABLE(seuDoraemon main.cpp)
 TARGET_LINK_LIBRARIES(seuDoraemon
 bioloid
-camera
+#camera
 com
-rmg
-perception
+dora_core
+dora_perception
 pthread
 RBIO.a
 )

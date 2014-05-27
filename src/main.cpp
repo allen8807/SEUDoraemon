@@ -13,13 +13,13 @@
 #include<iostream>
 #include<math.h>
 #include"bioloid/IntfBioloid.h"
-#include"rmg/rmg146.h"
+//#include"rmg/rmg146.h"
 #include"com/AX12_C3.h"
 #include"com/AD.h"
 #include"com/IMU.h"
-#include"camera/camera.h"
+//#include"camera/camera.h"
 #include"roboard.h"
-#include"perception/DoraIMU.h"
+#include"perception/DoraPerceptions.h"
 
 using namespace std;
 using namespace BioInterface;
@@ -48,21 +48,14 @@ void * cameraThread(void *pa) {
     while (camera_flag == 1) {
         struct timeval timeStart;
         gettimeofday(&timeStart, NULL);
-        camera_flag = mainLoop();
+    //    camera_flag = mainLoop();
 
-        cameraInfo[0] = Get_xielv();
-        cameraInfo[1] = Get_piancha();
+   //     cameraInfo[0] = Get_xielv();
+    //    cameraInfo[1] = Get_piancha();
         cout << "cameraInfo[0] : " << cameraInfo[0] << endl;
         cout << "cameraInfo[1] : " << cameraInfo[1] << endl;
         //setBioJointDeg(0,20);
-/*
-        if (cameraInfo[1] >= 0) //开平方是为了拟合偏差之，开平方后的数值差不多就是偏差值（厘米）
-        {
-            cameraInfo[1] = sqrt(abs(cameraInfo[1]));
-        } else {
-            cameraInfo[1] = -sqrt(abs(cameraInfo[1]));
-        }
-*/
+
 
 
         // usleep(30000);
@@ -92,12 +85,12 @@ void * postureThread(void *pa) {
     while (posture_flag == 1) {
         struct timeval timeStart;
         gettimeofday(&timeStart, NULL);
-        Compass(az, pitch, roll);
+    //    Compass(az, pitch, roll);
         std::cout << "values : az" << az[0] << " pitch" << pitch[0] << " roll" << roll[0] << std::endl;
         //    usleep(50000);
         struct timeval timeEnd;
         gettimeofday(&timeEnd, NULL);
-
+#define DELTA_TIME	  	   0.01//10ms
         long timeCost = 1000000 * (timeEnd.tv_sec - timeStart.tv_sec)+(timeEnd.tv_usec - timeStart.tv_usec);
         long timeCostms = timeCost / 1000;
         long timeComps = DELTA_TIME * 1000000 - timeCost;
@@ -301,19 +294,23 @@ int main() {
 //     pthread_mutex_init(&posture_mutex, NULL);
     unsigned char comd[11] ={0xFF,0xFF,0x08,0x11,0x02,0x00,0x00,0x00,0x00,0x00,0x1B};
     unsigned char state;
-    initRoboard();
-    DoraIMU doraimu;
+ //   initRoboard();
+ //   DoraIMU doraimu;
 //     runMultiplyThread();
-    while(1)
-    {
+//    while(1)
+//    {
 //       USART2_IRQHandler();
 //       UART2_CommandRoute();
 //       printf("ax:%d\n",ax);
 //	
-        doraimu.update();
+  //      doraimu.update();
         //doraimu.test();
-        
-    }
+  //      
+  //  }
+    DoraCamera doraCam;
+    doraCam.initCamera();
+    doraCam.test();
+    
 
     return 0;
 }
