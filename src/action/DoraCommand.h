@@ -9,6 +9,7 @@
 #define	DORACOMMAND_H
 #include<string>
 #include<vector>
+#include"core/DoraMutiThreadData.h"
 namespace dora_action {
     using namespace std;
 

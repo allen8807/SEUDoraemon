@@ -10,19 +10,24 @@
 #include"seumath/Math.hpp"
 #include"core/DoraMutiThreadData.h"
 #include<ctime>
+#include"DoraBasicPerception.h"
+
 namespace dora_perception {
-    class DoraIMU {
+    
+    class DoraIMU : public DoraBasicPerception {
     public:
         DoraIMU();
         DoraIMU(const DoraIMU& orig);
         void update();
+        void notifyObservers();
         void test();
         virtual ~DoraIMU();
     private:
         void updatePosture();
         void updateMotion();
         void updatePostionBySpeed();
-        void updateIsWalking();
+        void updateRobotState();
+        
         clock_t mLastPosture;
         clock_t mLastAcc;
         clock_t mLastVelClock;;
@@ -44,7 +49,8 @@ namespace dora_perception {
         //重力加速度g
         float mG;
         //向前走的平均速度
-        float mSpeedForward;       
+        float mSpeedForward;
+        dora_core::RobotState mRobotState;
         bool mIsWalking;
     };
 }//namespace dora_perception 

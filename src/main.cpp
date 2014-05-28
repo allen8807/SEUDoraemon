@@ -294,22 +294,23 @@ int main() {
 //     pthread_mutex_init(&posture_mutex, NULL);
     unsigned char comd[11] ={0xFF,0xFF,0x08,0x11,0x02,0x00,0x00,0x00,0x00,0x00,0x1B};
     unsigned char state;
- //   initRoboard();
- //   DoraIMU doraimu;
-//     runMultiplyThread();
-//    while(1)
-//    {
-//       USART2_IRQHandler();
-//       UART2_CommandRoute();
-//       printf("ax:%d\n",ax);
-//	
-  //      doraimu.update();
-        //doraimu.test();
-  //      
-  //  }
-    DoraCamera doraCam;
-    doraCam.initCamera();
-    doraCam.test();
+    initRoboard();
+    DoraIMU doraimu;
+  //   runMultiplyThread();
+    while(1)
+    {
+	
+        doraimu.update();
+      //  doraimu.test();
+        
+    }
+//    DoraCamera doraCam;
+//    doraCam.initCamera();
+//    sleep(1);
+//    int a = 20;
+//    while(--a){
+//    doraCam.test();
+//    }
     
 
     return 0;

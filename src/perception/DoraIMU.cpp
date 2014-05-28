@@ -13,6 +13,7 @@
 namespace dora_perception {
     using namespace seumath;
     using namespace std;
+    using namespace dora_core;
 
     DoraIMU::DoraIMU() {
         mPosture = Vector3f(0.0f, 0.0f, 0.0f);
@@ -112,15 +113,14 @@ namespace dora_perception {
         }
     }
 
-    void DoraIMU::updateIsWalking(){
-        if(false == mIsWalking ){
+    void DoraIMU::updateRobotState(){
+        if(dora_core::RS_WALK_FORWARD != mRobotState ){
             mLastVelClock = mNow;
         }
-        mIsWalking = false;   
-        
+        MUTI_DATA.getRobotState(&mRobotState);     
     }
     void DoraIMU::updatePostionBySpeed(){
-        if(mIsWalking == true){
+        if(dora_core::RS_WALK_FORWARD == mRobotState){
         this->mVelocity = Vector3f(this->mSpeedForward,0.0f,0.0f);
         TransMatrix<float> tm;
         tm.rotationY(mPosture.z()-mFirstBodyDir);
@@ -136,8 +136,13 @@ namespace dora_perception {
         updatePosture();
         
         //updateMotion();
-        updateIsWalking();
+        updateRobotState();
     }
+    
+     void DoraIMU::notifyObservers(){
+         MUTI_DATA.setPosture(mPosture);
+         MUTI_DATA.setPostion(mPostion);
+     }
 
     void DoraIMU::test() {
         Vector3f p1(0.0f, 0.0f, 1.414f);
