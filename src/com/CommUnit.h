@@ -7,14 +7,13 @@
 
 #ifndef DORACOMMUNIT_H
 #define	DORACOMMUNIT_H
-
 class CommUnit {
 public:
     CommUnit();
     CommUnit(const CommUnit& orig);
     virtual ~CommUnit();
-    static void recieveCmd();
-    static void sendCmd(unsigned char * pstCmdBuf,int pstSize); 
+    static unsigned char recieveReturnValue();
+    static bool sendCmd(unsigned char * pstCmdBuf,int pstSize);
     
 private:
 

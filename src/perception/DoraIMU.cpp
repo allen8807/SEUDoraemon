@@ -17,8 +17,9 @@ namespace dora_perception {
 
     DoraIMU::DoraIMU() {
         mPosture = Vector3f(0.0f, 0.0f, 0.0f);
-        mFirstBodyDir = 0.0f;
+        mFirstBodyDir = 140.0f;
         mAcc = Vector3f(0.0f, 0.0f, 0.0f);
+        mAccVelocity=Vector3f(0.0f, 0.0f, 0.0f);
         mVelocity = Vector3f(0.0f, 0.0f, 0.0f);
         mPostion = Vector3f(0.0f, 0.0f, 0.0f);
         mKX = 16302;
@@ -36,10 +37,11 @@ namespace dora_perception {
         mLastAcc = mNow;
         mLastVelClock = mNow;
         
-        mSpeedForward = 0.057f;
+        mSpeedForward = 0.0618f;
         mIsWalking = false;
         mPostionBySpeed = Vector3f(0.0f, 0.0f, 0.0f);
 
+        mRobotState = dora_core::RS_STOP;
     }
 
     DoraIMU::DoraIMU(const DoraIMU& orig) {
@@ -53,12 +55,12 @@ namespace dora_perception {
             mPosture.x() = imu_calc_roll;
             mPosture.y() = imu_calc_pitch;
             mPosture.z() = imu_calc_yaw;
-            cout << "posture\t"
-                    << imu_calc_roll << '\t'
-                    << imu_calc_pitch << '\t'
-                    << imu_calc_yaw << '\t'
-                    << "time" << (mNow - mLastPosture)*1000 / CLOCKS_PER_SEC << "ms"
-                    << endl;
+//            cout << "posture\t"
+//                    << imu_calc_roll << '\t'
+//                    << imu_calc_pitch << '\t'
+//                    << imu_calc_yaw << '\t'
+//                    << "time" << (mNow - mLastPosture)*1000 / CLOCKS_PER_SEC << "ms"
+//                    << endl;
             this->mLastPosture = mNow;
         } else {
             //   cout<<"not update imu!!!" <<endl;
@@ -80,31 +82,36 @@ namespace dora_perception {
             mAcc = tm.rotate(mAcc);
             //   mAcc.z() = mAcc.z()+mG;
             double duration = ((double) (mNow - mLastAcc)) / CLOCKS_PER_SEC;
-            Vector3f newVel = mVelocity + mAcc*duration;
+            Vector3f newVel = mAccVelocity + mAcc*duration;
 
-                mPostion = mPostion + (newVel + mVelocity)*(duration / 2);
+                mPostion = mPostion + (newVel + mAccVelocity)*(duration / 2);
 
-            mVelocity = newVel;
+            mAccVelocity = newVel;
+            cout<<"cljorig"
+                    <<"\thx\t"<<imu_orig_hx
+                     <<"\thy\t"<<imu_orig_hy
+                     <<"\thz\t"<<imu_orig_hz
+                    <<endl;
 
-            cout << "dur\t" << duration <<
-                    "accorig\t" <<
-                    imu_orig_ax + mOffsetX << '\t'
-                    << imu_orig_ay + mOffsetY << '\t'
-                    << imu_orig_az + mOffsetZ << '\t'
-                    << "Acc\t"
-                    << mAcc.x() << '\t'
-                    << mAcc.y() << '\t'
-                    << mAcc.z() << '\t'
-                    << "Postion\t"
-                    << mPostion.x() << '\t'
-                    << mPostion.y() << '\t'
-                    << mPostion.z() << '\t'
+//            cout << "dur\t" << duration <<
+//                    "accorig\t" <<
+//                    imu_orig_ax + mOffsetX << '\t'
+//                    << imu_orig_ay + mOffsetY << '\t'
+//                    << imu_orig_az + mOffsetZ << '\t'
+//                    << "Acc\t"
+//                    << mAcc.x() << '\t'
+//                    << mAcc.y() << '\t'
+//                    << mAcc.z() << '\t'
+//                    << "Postion\t"
+//                    << mPostion.x() << '\t'
+//                    << mPostion.y() << '\t'
+//                    << mPostion.z() << '\t'
                     //               <<"posture\t"
                     //               <<imu_calc_roll<<'\t'
                     //               <<imu_calc_pitch<<'\t'
                     //               <<imu_calc_yaw<<'\t'
-                    << "time" << (mNow - mLastAcc)*1000 / CLOCKS_PER_SEC << "ms"
-                    << endl;
+//                    << "time" << (mNow - mLastAcc)*1000 / CLOCKS_PER_SEC << "ms"
+//                    << endl;
             this->mLastAcc = mNow;
             //}
             //++j;
@@ -118,14 +125,15 @@ namespace dora_perception {
             mLastVelClock = mNow;
         }
         MUTI_DATA.getRobotState(&mRobotState);     
+  //      cout<<"mRobotState"<<mRobotState<<endl;
     }
     void DoraIMU::updatePostionBySpeed(){
         if(dora_core::RS_WALK_FORWARD == mRobotState){
         this->mVelocity = Vector3f(this->mSpeedForward,0.0f,0.0f);
         TransMatrix<float> tm;
-        tm.rotationY(mPosture.z()-mFirstBodyDir);
+        tm.rotationZ(mPosture.z()-mFirstBodyDir);
        mVelocity= tm.rotate(mVelocity);
-       mPostionBySpeed= mPostionBySpeed+mVelocity*(mNow-mLastVelClock);
+       mPostionBySpeed= mPostionBySpeed+mVelocity*((mNow-mLastVelClock)*1000.0f/ CLOCKS_PER_SEC/1000);
         mLastVelClock=mNow;
         }     
     }
@@ -135,8 +143,10 @@ namespace dora_perception {
         UART2_CommandRoute();
         updatePosture();
         
-        //updateMotion();
+        updateMotion();
         updateRobotState();
+        updatePostionBySpeed();
+    //    writePosToFile();
     }
     
      void DoraIMU::notifyObservers(){
@@ -151,6 +161,33 @@ namespace dora_perception {
         tm.rotationY(-45.0f);
         p2 = tm.rotate(p1);
         cout << "p1\t" << p1 << "p2\t" << p2 << endl;
+    }
+    
+    void DoraIMU::writePosToFile(){
+        static clock_t lasttime = mNow;
+        if((mNow - lasttime)/CLOCKS_PER_SEC > 1){
+            lasttime = mNow;
+             cout<<"mRobotState"<<mRobotState<<endl;
+        ofstream   ofacc( "posacc.txt",iostream::app); 
+        ofacc<<mPostion.x()<<'\t'
+                <<mPostion.y()<<'\t'
+                <<mPostion.z()<<'\t'
+                <<"time\t"<<mNow<<'\t'
+                <<mPosture<<'\t'
+                <<endl;
+        ofacc.close();
+          ofstream   ofspeed( "posspeed.txt",iostream::app); 
+        ofspeed<<mPostionBySpeed.x()<<'\t'
+                <<mPostionBySpeed.y()<<'\t'
+                <<mPostionBySpeed.z()<<'\t'
+                 <<mPosture<<'\t'
+                <<"time\t"<<mNow<<'\t'
+                
+                <<endl;
+        ofspeed.close();
+        }
+        
+        
     }
 }//end namespace dora_perception
 

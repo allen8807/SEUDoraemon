@@ -12,7 +12,7 @@
 #include <string.h>
 #include<iostream>
 #include<math.h>
-#include"bioloid/IntfBioloid.h"
+//#include"bioloid/IntfBioloid.h"
 //#include"rmg/rmg146.h"
 #include"com/AX12_C3.h"
 #include"com/AD.h"
@@ -20,40 +20,37 @@
 //#include"camera/camera.h"
 #include"roboard.h"
 #include"perception/DoraPerceptions.h"
-
+#include"action/DoraCommand.h"
+#include"action/DoraAction.h"
 using namespace std;
-using namespace BioInterface;
 using namespace dora_perception;
-pthread_mutex_t camera_mutex;
-pthread_mutex_t posture_mutex;
+using namespace dora_action;
+//pthread_mutex_t camera_mutex;
+//pthread_mutex_t posture_mutex;
 pthread_t camera_tid;
 pthread_t posture_tid;
 pthread_t ctrl_tid;
 
-float camera_info[2];
-float posture_info[3];
+
 
 int camera_flag = 1;
 int posture_flag = 1;
 int ctrl_flag = 1;
 
-//unsigned int ChangeTable[BioInterface::DOF] = {0,15,17,2,16,18,3,7,5,9,11,13,4,8,6,10,12,14};
-//int ChangeMarkTable[BioInterface::DOF] = {1,1,1,1,1,1,1,1,1,-1,-1,1,1,1,1,-1,-1,1};
-unsigned int ChangeTable[BioInterface::DOF] = {0, 1,15,17, 2,16,18, 3,7,5,9,11,13, 4,8,6,10,12,14};
-int ChangeMarkTable[BioInterface::DOF] = {1, 1,1, 1,1, 1,1, 1,1, -1,-1, 1,1, 1,1, 1,1, 1,1};
+
 
 void * cameraThread(void *pa) {
-    float cameraInfo[2];
+  //  float cameraInfo[2];
     //   int cycles = 10;
-    while (camera_flag == 1) {
+  //  while (camera_flag == 1) {
         struct timeval timeStart;
         gettimeofday(&timeStart, NULL);
     //    camera_flag = mainLoop();
 
    //     cameraInfo[0] = Get_xielv();
     //    cameraInfo[1] = Get_piancha();
-        cout << "cameraInfo[0] : " << cameraInfo[0] << endl;
-        cout << "cameraInfo[1] : " << cameraInfo[1] << endl;
+  //      cout << "cameraInfo[0] : " << cameraInfo[0] << endl;
+ //       cout << "cameraInfo[1] : " << cameraInfo[1] << endl;
         //setBioJointDeg(0,20);
 
 
@@ -63,86 +60,52 @@ void * cameraThread(void *pa) {
         gettimeofday(&timeEnd, NULL);
         long timeCost = 1000000 * (timeEnd.tv_sec - timeStart.tv_sec)+(timeEnd.tv_usec - timeStart.tv_usec);
         long timeCostms = timeCost / 1000;
-        printf("cameraThread cost %ld ms %ld us\n", timeCostms, timeCost);
+   //     printf("cameraThread cost %ld ms %ld us\n", timeCostms, timeCost);
         /*
          *以下操作camera交互数据
          *
          */
-        pthread_mutex_lock(&camera_mutex);
-        camera_info[0] = cameraInfo[0];
-        camera_info[1] = cameraInfo[1];
-        pthread_mutex_unlock(&camera_mutex);
-    }
+//        pthread_mutex_lock(&camera_mutex);
+//        camera_info[0] = cameraInfo[0];
+//        camera_info[1] = cameraInfo[1];
+//        pthread_mutex_unlock(&camera_mutex);
+  //  }
 }
 
 void * postureThread(void *pa) {
-    const double gyr_pi = 3.14159265;
-    //   int cycles = 10;
-    double az[2] = {0, 0};
-    double pitch[2] = {0, 0};
-    double roll[2] = {0, 0};
-
-    while (posture_flag == 1) {
+  
+DoraIMU doraimu;
+    while (1) {
         struct timeval timeStart;
         gettimeofday(&timeStart, NULL);
-    //    Compass(az, pitch, roll);
-        std::cout << "values : az" << az[0] << " pitch" << pitch[0] << " roll" << roll[0] << std::endl;
-        //    usleep(50000);
+   doraimu.update();
+        
+        
         struct timeval timeEnd;
         gettimeofday(&timeEnd, NULL);
-#define DELTA_TIME	  	   0.01//10ms
+//#define DELTA_TIME	  	   0.01//10ms
         long timeCost = 1000000 * (timeEnd.tv_sec - timeStart.tv_sec)+(timeEnd.tv_usec - timeStart.tv_usec);
         long timeCostms = timeCost / 1000;
-        long timeComps = DELTA_TIME * 1000000 - timeCost;
-        if (timeComps > 0) {
-            usleep(timeComps);
-        }
-        printf("postureThread cost %ld ms %ld us\n", timeCostms, timeCost);
-        /*
-         *以下操作陀螺仪交互数据
-         *
-         */
-        pthread_mutex_lock(&posture_mutex);
-        posture_info[0] = roll[0] / gyr_pi * 180.0f;
-        posture_info[1] = pitch[0] / gyr_pi * 180.0f;
-        posture_info[2] = az[0] / gyr_pi * 180.0f;
-        pthread_mutex_unlock(&posture_mutex);
+ //       long timeComps = DELTA_TIME * 1000000 - timeCost;
+     
+ //       printf("postureThread cost %ld ms %ld us\n", timeCostms, timeCost);
+
     }
 
 }
 
 void *ctrlThread(void* pa) {
     //  int cycles = 100;
-    int zhuangtouflag = 0;
-    IB.setTimeOfCycle(0.02f);
-    BioInterface::PerceptionInfo ptI;
-    BioInterface::EffectorInfo efI;
-    while (ctrl_flag == 1) {
+   DoraAction doraAct;
+  //  IB.setTimeOfCycle(0.02f);
+ 
+ //   while (ctrl_flag == 1) {
+//    while(1){
         struct timeval timeStart;
         gettimeofday(&timeStart, NULL);
-
-        float cameraInfo[2] = {0.0f, 0.0f};
-        float postureInfo[3] = {0.0f, 0.0f, 0.0f};
-
-        /*
-         *以下操作camera交互数据
-         *
-         */
-        pthread_mutex_lock(&camera_mutex);
-        cameraInfo[0] = camera_info[0];
-        cameraInfo[1] = camera_info[1];
-       //cameraInfo[0] = 0;
-       // cameraInfo[1] = 0;
-	pthread_mutex_unlock(&camera_mutex);
-        /*
-         *以下操作陀螺仪交互数据
-         *
-         */
-        pthread_mutex_lock(&posture_mutex);
-        postureInfo[0] = posture_info[0];
-        postureInfo[1] = posture_info[1];        
-	postureInfo[2] = posture_info[2];
-        pthread_mutex_unlock(&posture_mutex);
+ 
+ //  doraAct.run();
+      
         //以下为控制主程序
 /*
         if (zhuangtouflag == 0)//
@@ -160,44 +123,7 @@ void *ctrlThread(void* pa) {
 
         }
 */
-        ptI.mCameraOffset = cameraInfo[1];
-        ptI.mCameraSlope = cameraInfo[0];
-        ptI.mTorsoPosture[0] = postureInfo[0];
-        ptI.mTorsoPosture[1] = postureInfo[1];
-        ptI.mTorsoPosture[2] = postureInfo[2];
-        IB.setPerceptionMode(ptI);
-     //   IB.setBlindMode(BioInterface::WALK_STRAIGHT);
-
-        IB.getTargetJoints(efI);
-        cout << "mDeg:\n";
-        for (int i = 0; i < BioInterface::DOF; i++) {
-            cout << efI.mJointsDegs[i] << " ";
-        }
-        cout << endl;
-  	
-	cout <<"cameraInfo[0]::::::::::::::::::::::::"<<cameraInfo[0]<<endl;
-	
-        for (unsigned int ei = 0; ei < BioInterface::DOF; ei++) {
-          RegSetPosition(ei,(ChangeMarkTable[ei]* efI.mJointsDegs[ei]));
-	//if(ei>=(BioInterface::DOF)-5)
-        //RegSetPosition(ChangeTable[ei],(ChangeMarkTable[ei]* efI.mJointsDegs[ei]));
-	//else 
-	//RegSetPosition(ChangeTable[ei],0);
-
-	}
-
-        if (zhuangtouflag == 1) {
-            RegSetPosition(0, 30);
-        } else {
-            RegSetPosition(0, 0);
-        }
-
-int temp0,temp1;
-temp0= ReadADByID(0);
-usleep(100);
-temp1=ReadADByID(1);
-//	if(temp0 >1 || temp1 >1 )
-	    Action(Broadcast_ID);
+      
 
         //  usleep(20000);
         struct timeval timeEnd;
@@ -205,11 +131,11 @@ temp1=ReadADByID(1);
         long timeCost = 1000000 * (timeEnd.tv_sec - timeStart.tv_sec)+(timeEnd.tv_usec - timeStart.tv_usec);
         long timeCostms = timeCost / 1000;
         long timeComps = 20000 - timeCost;
-        if (timeComps > 0) {
-            usleep(timeComps);
-        }
-        printf("ctrlThread cost %ld ms %ld us\n", timeCostms, timeCost);
-    }
+//        if (timeComps > 0) {
+//            usleep(timeComps);
+//        }
+    //    printf("ctrlThread cost %ld ms %ld us\n", timeCostms, timeCost);
+ //   }
 }
 
 void initRoboard() {
@@ -292,26 +218,26 @@ int main() {
     /*用默认属性初始化互斥锁*/
 //     pthread_mutex_init(&camera_mutex, NULL);
 //     pthread_mutex_init(&posture_mutex, NULL);
-    unsigned char comd[11] ={0xFF,0xFF,0x08,0x11,0x02,0x00,0x00,0x00,0x00,0x00,0x1B};
-    unsigned char state;
+  //  unsigned char comd[11] ={0xFF,0xFF,0x08,0x11,0x02,0x00,0x00,0x00,0x00,0x00,0x1B};
+  //  unsigned char state;
     initRoboard();
-    DoraIMU doraimu;
-  //   runMultiplyThread();
-    while(1)
-    {
-	
-        doraimu.update();
+  //  DoraIMU doraimu;
+     runMultiplyThread();
+  //  while(1)
+  //  {
+//	
+   //     doraimu.update();
       //  doraimu.test();
         
-    }
+  //  }
 //    DoraCamera doraCam;
 //    doraCam.initCamera();
 //    sleep(1);
 //    int a = 20;
-//    while(--a){
+// //   while(--a){
 //    doraCam.test();
-//    }
-    
-
+ //   }
+//    DoraAction doraAct;
+//    doraAct.run();
     return 0;
 }

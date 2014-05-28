@@ -12,9 +12,11 @@
 #include <cxcore.h>
 #include <highgui.h>
 #include"DoraBasicPerception.h"
-
+#include"seumath/Math.hpp"
+#include<vector>
 namespace dora_perception {
     using namespace std;
+    
 typedef struct VideoCap_cfg
 {
     bool use_cv;
@@ -26,6 +28,13 @@ typedef struct VideoCap_cfg
     unsigned int format; 
 }VideoCap_cfg;
     
+typedef struct VisionBlock
+{
+    seumath::Vector2i leftDownPoint;//(height,width)
+    int height;
+    int width;
+    
+}VisionBlock;
 class DoraCamera :public DoraBasicPerception {
 public:
     DoraCamera();
@@ -39,7 +48,7 @@ public:
     void closeCamera();
     void saveFrameToFile(const char *  pstFilename);
     void saveImageToFile(const char* pstFilename,IplImage * pstImage);
-    void getBlock();
+    void setBlock(IplImage * pstImage);//二值图像
     void test();
 private:
     void narrowImage();
@@ -50,6 +59,8 @@ private:
     void erodeAndDilateImage(IplImage * pstImage);
     void printGrayImage(IplImage * pstImage);
     void printBinaryImage(IplImage * pstImage);
+    
+    
     VideoCap_cfg mCamCfg;
     int mNarrowTimes;
     int mShrinkTimes;
@@ -59,6 +70,7 @@ private:
     IplImage*  mPtrShrinkImage;
     IplImage*  mPtrErodeDilateImage;
     
+    vector<VisionBlock> mBlocks;
     //opencv
     IplImage*  mPtrFrame;
     CvCapture* mPtrCapture;

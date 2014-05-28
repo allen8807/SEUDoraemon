@@ -13,7 +13,7 @@
 
 namespace dora_perception {
     using namespace std;
-
+using namespace seumath;
     DoraCamera::DoraCamera() {
         mPtrFrame = NULL;
         mPtrCapture = NULL;
@@ -22,12 +22,12 @@ namespace dora_perception {
         mPtrBinaryImage = NULL;
         mPtrShrinkImage = NULL;
         mPtrErodeDilateImage = NULL;
-        mNarrowTimes = 2;
-        mShrinkTimes = 2;
+        mNarrowTimes = 10;
+        mShrinkTimes = 4;
 
         memset((&mCamCfg), 0, sizeof (VideoCap_cfg));
-        mCamCfg.width = 160;
-        mCamCfg.height = 120;
+        mCamCfg.width = 640;
+        mCamCfg.height = 480;
     }
 
     DoraCamera::DoraCamera(const DoraCamera& orig) {
@@ -217,42 +217,42 @@ namespace dora_perception {
     }
     
     void DoraCamera::printGrayImage(IplImage * pstImage){
-//         if (NULL == pstImage) {
-//             return;
-//        }
-//        int i =0;
-//        int j =0;
-//       unsigned char tmp = 0; 
-//          for (i = 0; i < pstImage->height; ++i) {
-//            for (j = 0; j < pstImage->width; ++j) {
-//                tmp = pstImage->imageData[i * (pstImage->widthStep) + j * (pstImage->nChannels)];
-//                
-//                printf("%3d ",tmp);
-//            }
-//            cout<<"*"<<endl;
-//        }
-//        
+         if (NULL == pstImage) {
+             return;
+        }
+        int i =0;
+        int j =0;
+       unsigned char tmp = 0; 
+          for (i = 0; i < pstImage->height; ++i) {
+            for (j = 0; j < pstImage->width; ++j) {
+                tmp = pstImage->imageData[i * (pstImage->widthStep) + j * (pstImage->nChannels)];
+                
+                printf("%3d ",tmp);
+            }
+            cout<<"*"<<endl;
+        }
+        
     }
     
      void DoraCamera::printBinaryImage(IplImage * pstImage){
-//         if (NULL == pstImage) {
-//             return;
-//        }
-//        int i =0;
-//        int j =0;
-//       unsigned char tmp = 0; 
-//          for (i = 0; i < pstImage->height; ++i) {
-//            for (j = 0; j < pstImage->width; ++j) {
-//                tmp = pstImage->imageData[i * (pstImage->widthStep) + j * (pstImage->nChannels)];
-//                if(tmp>128){
-//                printf("  ");
-//                }else{
-//                    printf("1 ");
-//                }
-//            }
-//            cout<<"*"<<endl;
-//        }
-//        
+         if (NULL == pstImage) {
+             return;
+        }
+        int i =0;
+        int j =0;
+       unsigned char tmp = 0; 
+          for (i = 0; i < pstImage->height; ++i) {
+            for (j = 0; j < pstImage->width; ++j) {
+                tmp = pstImage->imageData[i * (pstImage->widthStep) + j * (pstImage->nChannels)];
+                if(tmp>128){
+                printf("  ");
+                }else{
+                    printf("1 ");
+                }
+            }
+            cout<<"*"<<endl;
+        }
+        
     }
 
     void DoraCamera::notifyObservers() {
@@ -279,8 +279,8 @@ namespace dora_perception {
     }
 
     void DoraCamera::updateFrame() {
-        mPtrFrame = cvQueryFrame(mPtrCapture);
-   //      mPtrFrame = cvLoadImage("01.jpg",CV_LOAD_IMAGE_COLOR);
+    //    mPtrFrame = cvQueryFrame(mPtrCapture);
+         mPtrFrame = cvLoadImage("02.jpg",CV_LOAD_IMAGE_COLOR);
         if (NULL != mPtrFrame) {
             cout << "update frame succ" << endl;
         } else {
@@ -300,7 +300,7 @@ namespace dora_perception {
     }
 
     void DoraCamera::saveImageToFile(const char* pstFilename, IplImage * pstImage) {
-     //   cvSaveImage(pstFilename, pstImage);
+        cvSaveImage(pstFilename, pstImage);
         cout << "filename\n" << pstFilename
                 << "\ncolor model\n" << pstImage->colorModel
                 << "\ndata\n" << pstImage->imageSize
@@ -312,6 +312,121 @@ namespace dora_perception {
                 << endl;
         cout << "write to file" << endl;
     }
+     void DoraCamera::setBlock(IplImage * pstImage){
+        if (NULL == pstImage) {
+            return;
+        }
+        mBlocks.clear();
+         IplImage * tmpImage = 
+                 cvCreateImage(
+                 cvGetSize(pstImage),
+                pstImage->depth,
+                1
+                );
+         int width = pstImage->width;
+         int height = pstImage->height;
+         int widthStep = pstImage->widthStep;
+         cvCopy(pstImage,tmpImage,NULL);
+         this->printGrayImage(tmpImage);
+         cout<<"set bound"<<endl;
+         //填边
+         const int whiteBit = 255;
+         const int blackBit = 0;
+         const int dealedBit = 160;
+         const int targetBit = 80;
+          int maxTargetHeight = height/3;
+         int i =0;
+         int j =0;
+         
+         for(i=0;i<height;++i){
+             tmpImage->imageData[i*widthStep]=whiteBit;
+             tmpImage->imageData[i*widthStep+width-1] = whiteBit;
+         }
+         for(j = 0; j<width;++j){
+             tmpImage->imageData[j]=whiteBit;
+             tmpImage->imageData[(height-1)*widthStep+j] = whiteBit;
+         }
+         this->printGrayImage(tmpImage);
+         //处理
+         char * boundaryImageData = tmpImage->imageData;
+         for(i = height - 2;i>0;--i){
+             for(j = 1;j<width-1;++j){
+                 if(blackBit == boundaryImageData[i*widthStep+j]){
+                     int left = j;
+                     int minLeft = j;
+                     int right = j;
+                     int maxRight = j;
+                     int up = i;
+                     int k = 0;
+                     for(up = i;up>0;--up){
+                         cout<<" i "<<i<< "j "<<j << "up "<<up<<endl;
+                     while(!((blackBit == boundaryImageData[up*widthStep+left])
+                             && (blackBit != boundaryImageData[up*widthStep+left -1]) )){
+                         if(blackBit == boundaryImageData[up*widthStep+left]){
+                             --left;
+                         }else{
+                             ++left;
+                         }
+                         if(left<=1||left>=width-2){
+                             break;
+                         }
+                     }
+                         cout<<"left" << left<<endl;
+                     while(!((blackBit == boundaryImageData[up*widthStep+right])
+                             && (blackBit != boundaryImageData[up*widthStep+right+1]) )){
+                         if(blackBit == boundaryImageData[up*widthStep+right]){
+                             ++right;
+                         }else{
+                             --right;
+                         }
+                         if(right<=1||right>=width-2){
+                             break;
+                         }
+                     }
+                         cout<<"right" << right<<endl;
+                     if(( i-up )<= maxTargetHeight){
+                             if(left<minLeft){
+                         minLeft = left;   
+                     }   
+                             if(right>maxRight){
+                                 maxRight=right;
+                             }
+                     }
+                     //如果左边界大于右边界那么循环结束，跳出
+                     if(left>right){
+                         break;
+                     }
+                     
+                     for(k = left;k<=right;++k){
+                         boundaryImageData[up*widthStep+k] = dealedBit;
+                     }
+                     
+                     }
+                     VisionBlock tmpBlock;
+                     tmpBlock.width = maxRight - minLeft+1;
+                     if(i-up < maxTargetHeight){
+                     tmpBlock.height = i-up;
+                     }else{
+                         tmpBlock.height = maxTargetHeight;
+                     }
+                     tmpBlock.leftDownPoint = Vector2i(i,minLeft);      
+                     mBlocks.push_back(tmpBlock);
+                 }
+             }
+         }
+         cout<<"after deal"<<endl;
+         this->printGrayImage(tmpImage);
+         int p = 0;
+         int blocksNum = mBlocks.size();
+         for(p=0;p<blocksNum;++p){
+             cout<< "leftdown point" << (mBlocks[p]).leftDownPoint
+             << "height" << (mBlocks[p]).height
+                     <<"width"<<(mBlocks[p]).width<<endl;
+         }
+         
+         
+         
+     }
 
     void DoraCamera::test() {
        
@@ -328,6 +443,7 @@ namespace dora_perception {
         binaryImage();
         erodeAndDilateImage(mPtrBinaryImage);
         shrinkImage();
+        setBlock(mPtrShrinkImage );
        end = clock();
         cout<<"time is "<< (end - begin)*1000/CLOCKS_PER_SEC<<"ms"<<endl;
     }

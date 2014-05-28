@@ -27,6 +27,7 @@ namespace dora_perception {
         void updateMotion();
         void updatePostionBySpeed();
         void updateRobotState();
+        void writePosToFile();
         
         clock_t mLastPosture;
         clock_t mLastAcc;
@@ -34,7 +35,7 @@ namespace dora_perception {
         clock_t mNow;
         seumath::Vector3f mPosture; //x=roll,y=pitch,z=yaw
         //     seumath::Vector3f mGyro;
-        seumath::Vector3f mVelocity;
+        seumath::Vector3f mAccVelocity;
         seumath::Vector3f mAcc;
         seumath::Vector3f mPostion;
         float mFirstBodyDir;
@@ -50,6 +51,7 @@ namespace dora_perception {
         float mG;
         //向前走的平均速度
         float mSpeedForward;
+        seumath::Vector3f mVelocity;
         dora_core::RobotState mRobotState;
         bool mIsWalking;
     };

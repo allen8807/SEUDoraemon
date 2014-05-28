@@ -10,8 +10,6 @@ DoraCommand.h
 ) 
 ADD_LIBRARY( dora_action STATIC ${SRCS}  )
 TARGET_LINK_LIBRARIES(dora_action
-dora_perception
+dora_core
 com
-cxcore
-highgui
 )

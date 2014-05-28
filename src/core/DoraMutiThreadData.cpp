@@ -6,12 +6,18 @@
  */
 
 #include "DoraMutiThreadData.h"
+#include<ctime>
 namespace dora_core {
 
     DoraMutiThreadData::DoraMutiThreadData() {
         mPostion = Vector3f(0.0f,0.0f,0.0f);
         mPosture = Vector3f(0.0f,0.0f,0.0f);
         mRobotState = RS_STOP;
+        //初始化互斥信号锁
+        pthread_mutex_init(&mPostureMutex, NULL);
+     pthread_mutex_init(&mPostionMutex, NULL);
+       pthread_mutex_init(&mRobotStateMutex, NULL);
+     
     }
 
     DoraMutiThreadData::DoraMutiThreadData(const DoraMutiThreadData& orig) {

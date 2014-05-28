@@ -17,7 +17,8 @@ namespace dora_core {
     enum RobotState {
         RS_STOP = 0,
         RS_WALK_FORWARD = 1,
-        RS_TURN_CIRCLE = 2
+        RS_TURN_CIRCLE = 2,
+        RS_WALK=3
     };
 
     class DoraMutiThreadData : public Singleton<DoraMutiThreadData> {

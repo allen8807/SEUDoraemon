@@ -7,16 +7,17 @@ ADD_SUBDIRECTORY( com )
 ADD_SUBDIRECTORY( perception )
 ADD_SUBDIRECTORY( action )
 #ADD_SUBDIRECTORY( camera )
-ADD_SUBDIRECTORY( bioloid )
+#ADD_SUBDIRECTORY( bioloid )
 ADD_SUBDIRECTORY( core )
 INCLUDE_DIRECTORIES(./)
 ADD_EXECUTABLE(seuDoraemon main.cpp)
 TARGET_LINK_LIBRARIES(seuDoraemon
-bioloid
+#bioloid
 #camera
 com
 dora_core
 dora_perception
+dora_action
 pthread
 RBIO.a
 )

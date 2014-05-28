@@ -27,6 +27,7 @@ using namespace std;
     void DoraCommand::setWalkCmd(WalkCommand& pstWalkCmd) {
         mCmdID = WALK_CMD;
         memcpy(&mWalkCmd, &pstWalkCmd, sizeof (WalkCommand));
+        mRobotState = dora_core::RS_WALK;
         
     }
 
@@ -35,9 +36,22 @@ using namespace std;
         mWalkCmd.x = 20;
         mWalkCmd.y = 0;
         mWalkCmd.dir = 0;
-        mWalkCmd.h = 50;
+        mWalkCmd.h = 40;
         mWalkCmd.num = pstStepNum;
+        mRobotState = dora_core::RS_WALK_FORWARD;
+        constructCmdData();
         
+    }
+    
+     void DoraCommand::WalkOnSamePlace(char pstStepNum) {
+        mCmdID = WALK_CMD;
+        mWalkCmd.x = 0;
+        mWalkCmd.y = 0;
+        mWalkCmd.dir = 0;
+        mWalkCmd.h = 40;
+        mWalkCmd.num = pstStepNum;
+         mRobotState = dora_core::RS_TURN_CIRCLE;
+        constructCmdData();
     }
 
     void DoraCommand::TurnInCircle(char pstStepNum) {
@@ -45,8 +59,10 @@ using namespace std;
         mWalkCmd.x = 0;
         mWalkCmd.y = 0;
         mWalkCmd.dir = 10;
-        mWalkCmd.h = 50;
+        mWalkCmd.h = 40;
         mWalkCmd.num = pstStepNum;
+        mRobotState = dora_core::RS_TURN_CIRCLE;
+        constructCmdData();
         
     }
     void DoraCommand::update(){
@@ -61,11 +77,11 @@ using namespace std;
         ss.clear();
         if(WALK_CMD==mCmdID ){
             mCmdData.push_back(0xFF);
-            ++length;
+           // ++length;
             mCmdData.push_back(0xFF);
-            ++length;
+           // ++length;
             mCmdData.push_back(length); 
-            ++length;
+           // ++length;
             mCmdData.push_back((char)mCmdID);
             ++length;
             sum+=(char)mCmdID;
@@ -90,6 +106,6 @@ using namespace std;
             mCmdData.push_back(sum);    
            
         }
-         cout<<"length" << length<<"mCmdDataSize"<<mCmdData.size()<<endl;
+    //     cout<<"length" << length<<"mCmdDataSize"<<mCmdData.size()<<endl;
     }
 }//namespace dora_action

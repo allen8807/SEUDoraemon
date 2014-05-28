@@ -25,7 +25,6 @@ namespace dora_action {
         ERR_CMD = 0x00,
         WALK_CMD = 0x10,
         SERVO_CTRL_CMD = 0x11
-        
     };
     class DoraCommand {
     public:
@@ -34,13 +33,28 @@ namespace dora_action {
         virtual ~DoraCommand();
         void setWalkCmd(WalkCommand& pstWalkCmd);
         void WalkForward(char pstStepNum);
+        void WalkOnSamePlace(char pstStepNum);
         void TurnInCircle(char pstStepNum);
         void update();
+
+        
+        vector<char> getCmdData() const {
+            return mCmdData;
+        }
+
+        CmdType getCmdID() const {
+            return mCmdID;
+        }
+
+        dora_core::RobotState getRobotState() const {
+            return mRobotState;
+        }
     private:
         void constructCmdData();
         CmdType mCmdID;
         WalkCommand mWalkCmd;
         vector<char> mCmdData;
+        dora_core::RobotState mRobotState;
     };
 }
 
