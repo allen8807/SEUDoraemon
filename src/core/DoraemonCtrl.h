@@ -16,6 +16,7 @@ namespace dora_core {
         DoraemonCtrl();
         DoraemonCtrl(const DoraemonCtrl& orig);
         virtual ~DoraemonCtrl();
+        void run();
     private:
         DoraPathPlanning mPathPlan;
 

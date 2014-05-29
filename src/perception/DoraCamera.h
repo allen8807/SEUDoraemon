@@ -14,9 +14,10 @@
 #include"DoraBasicPerception.h"
 #include"seumath/Math.hpp"
 #include<vector>
+#include"core/DoraWorldModel.h"
 namespace dora_perception {
     using namespace std;
-    
+    using namespace dora_core;
 typedef struct VideoCap_cfg
 {
     bool use_cv;
@@ -49,7 +50,9 @@ public:
     void saveFrameToFile(const char *  pstFilename);
     void saveImageToFile(const char* pstFilename,IplImage * pstImage);
     void setBlock(IplImage * pstImage);//二值图像
+    void compassImage(IplImage * pstImage);
     void test();
+    
 private:
     void narrowImage();
     void grayImage();
@@ -59,7 +62,7 @@ private:
     void erodeAndDilateImage(IplImage * pstImage);
     void printGrayImage(IplImage * pstImage);
     void printBinaryImage(IplImage * pstImage);
-    
+    void calcWMBlock(IplImage * pstImage);
     
     VideoCap_cfg mCamCfg;
     int mNarrowTimes;
@@ -71,6 +74,7 @@ private:
     IplImage*  mPtrErodeDilateImage;
     
     vector<VisionBlock> mBlocks;
+    vector<WMBlocks> mWMBlocks;
     //opencv
     IplImage*  mPtrFrame;
     CvCapture* mPtrCapture;

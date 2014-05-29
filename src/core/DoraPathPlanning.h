@@ -10,30 +10,39 @@
 #include "seumath/Math.hpp"
 #include <stack>
 namespace dora_core {
- using namespace seumath;
+    using namespace seumath;
+
     enum WRP_ST {
- ST_BEGIN =0,
- ST_ROUND =1,
- ST_BACK =2
- };
-class DoraPathPlanning {
-    
-public:
-    DoraPathPlanning();
-    DoraPathPlanning(const DoraPathPlanning& orig);
-    virtual ~DoraPathPlanning();
+        ST_BEGIN = 0,
+        ST_ROUND = 1,
+        ST_BACK = 2
+    };
 
-    void WalkRoundPostPlanning();
+    class DoraPathPlanning {
+    public:
+        DoraPathPlanning();
+        DoraPathPlanning(const DoraPathPlanning& orig);
+        virtual ~DoraPathPlanning();
 
-private:
+        void WalkRoundPostPlanning();
 
-       Vector2f mFinalTarget;
-       std::stack<Vector2f> mPathPlanningTargets;
- 
-        
-       WRP_ST mWalkRoundPostState;
-       std::stack<Vector2f> mWalkTargets;
-};
+        void WalkAvoidBlocks();
+
+        Vector2f getLocalTarget() const {
+            return mLocalTarget;
+        }
+
+    private:
+
+        Vector2f mFinalTarget;
+        std::stack<Vector2f> mPathPlanningTargets;
+
+
+        WRP_ST mWalkRoundPostState;
+        std::stack<Vector2f> mWalkTargets;
+
+        Vector2f mLocalTarget;
+    };
 }//namespace dora_core 
 
 #endif	/* DORAPATHPLANNING_H */

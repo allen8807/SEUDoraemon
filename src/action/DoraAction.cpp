@@ -6,7 +6,7 @@
  */
 
 #include "DoraAction.h"
-#include"DoraCommand.h"
+#include"core/DoraCommand.h"
 #include"com/CommUnit.h"
 #include"core/DoraMutiThreadData.h"
 #include<iostream>
@@ -32,14 +32,16 @@ namespace dora_action {
     }
 
     void DoraAction::setAction(DoraCommand& pstCmd) {
+        //cout<<"setACtion"<<endl;
         if (NULL != mPtrCmdBuff) {
             delete mPtrCmdBuff;
             mPtrCmdBuff = NULL;
             mCmdSize = 0;
         }
         vector<char> vData = pstCmd.getCmdData();
+        
         mCmdSize = vData.size();
-        cout << "mCmdSize" << mCmdSize << endl;
+      //  cout << "mCmdSize" << mCmdSize << endl;
         mRobotState = pstCmd.getRobotState();
         mCmdID = pstCmd.getCmdID();
         mPtrCmdBuff = new unsigned char[mCmdSize];
@@ -48,10 +50,14 @@ namespace dora_action {
             mPtrCmdBuff[i] = (unsigned char) vData[i];
             printf("%x ", mPtrCmdBuff[i]);
         }
-        //  cout<<endl;
+          cout<<endl;
     }
 
     void DoraAction::sendAction() {
+        static int ii = 0;
+        ++ii;
+        usleep(50*1000);
+        cout<<"send action "<<ii<<" "<<mCmdID<<endl;
         if (true != (CommUnit::sendCmd(mPtrCmdBuff, mCmdSize))) {
             cerr << "send err" << endl;
         }
@@ -100,13 +106,18 @@ namespace dora_action {
 
     void DoraAction::run() {
         DoraCommand cmd;
-          cmd.WalkForward(30);
+        MUTI_DATA.getCommand(cmd);
+        cout<< "[action] ID "<<cmd.getCmdID()<<endl;
+        cout<< cmd.getCmdData().size()<<endl;
+     //     cmd.WalkForward(30);
      //   cmd.WalkOnSamePlace(100);
       //  while (1) {
-
+        
             setAction(cmd);
+            if(cmd.getCmdID() !=ERR_CMD ){
             sendAction();
             receiveReturnCode();
+            }
       //  }
 
 

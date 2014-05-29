@@ -87,11 +87,11 @@ namespace dora_perception {
                 mPostion = mPostion + (newVel + mAccVelocity)*(duration / 2);
 
             mAccVelocity = newVel;
-            cout<<"cljorig"
-                    <<"\thx\t"<<imu_orig_hx
-                     <<"\thy\t"<<imu_orig_hy
-                     <<"\thz\t"<<imu_orig_hz
-                    <<endl;
+//            cout<<"cljorig"
+//                    <<"\thx\t"<<imu_orig_hx
+//                     <<"\thy\t"<<imu_orig_hy
+//                     <<"\thz\t"<<imu_orig_hz
+//                    <<endl;
 
 //            cout << "dur\t" << duration <<
 //                    "accorig\t" <<
@@ -143,10 +143,11 @@ namespace dora_perception {
         UART2_CommandRoute();
         updatePosture();
         
-        updateMotion();
+     //   updateMotion();
         updateRobotState();
         updatePostionBySpeed();
-    //    writePosToFile();
+        notifyObservers();
+        writePosToFile();
     }
     
      void DoraIMU::notifyObservers(){
@@ -165,26 +166,26 @@ namespace dora_perception {
     
     void DoraIMU::writePosToFile(){
         static clock_t lasttime = mNow;
-        if((mNow - lasttime)/CLOCKS_PER_SEC > 1){
+        if((mNow - lasttime)/CLOCKS_PER_SEC >= 1){
             lasttime = mNow;
-             cout<<"mRobotState"<<mRobotState<<endl;
-        ofstream   ofacc( "posacc.txt",iostream::app); 
-        ofacc<<mPostion.x()<<'\t'
-                <<mPostion.y()<<'\t'
-                <<mPostion.z()<<'\t'
-                <<"time\t"<<mNow<<'\t'
-                <<mPosture<<'\t'
-                <<endl;
-        ofacc.close();
-          ofstream   ofspeed( "posspeed.txt",iostream::app); 
-        ofspeed<<mPostionBySpeed.x()<<'\t'
-                <<mPostionBySpeed.y()<<'\t'
-                <<mPostionBySpeed.z()<<'\t'
-                 <<mPosture<<'\t'
-                <<"time\t"<<mNow<<'\t'
-                
-                <<endl;
-        ofspeed.close();
+             cout<<"mRobotState!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<mRobotState<<endl;
+//        ofstream   ofacc( "posacc.txt",iostream::app); 
+//        ofacc<<mPostion.x()<<'\t'
+//                <<mPostion.y()<<'\t'
+//                <<mPostion.z()<<'\t'
+//                <<"time\t"<<mNow<<'\t'
+//                <<mPosture<<'\t'
+//                <<endl;
+//        ofacc.close();
+//          ofstream   ofspeed( "posspeed.txt",iostream::app); 
+//        ofspeed<<mPostionBySpeed.x()<<'\t'
+//                <<mPostionBySpeed.y()<<'\t'
+//                <<mPostionBySpeed.z()<<'\t'
+//                 <<mPosture<<'\t'
+//                <<"time\t"<<mNow<<'\t'
+//                
+//                <<endl;
+//        ofspeed.close();
         }
         
         

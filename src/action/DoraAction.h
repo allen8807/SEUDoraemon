@@ -7,9 +7,10 @@
 
 #ifndef DORAACTION_H
 #define	DORAACTION_H
-#include"DoraCommand.h"
+#include"core/DoraCommand.h"
+
 namespace dora_action {
-    
+    using namespace dora_core;
       enum ReturnCode{
         CHECK_ERROR = 0xFE,
         CMD_ID_ERROR = 0xFD,

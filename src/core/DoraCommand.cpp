@@ -10,7 +10,7 @@
 #include<sstream>
 #include<iostream>
 
-namespace dora_action {
+namespace dora_core {
 using namespace std;
     DoraCommand::DoraCommand() {
         mCmdID = ERR_CMD;
@@ -23,6 +23,17 @@ using namespace std;
 
     DoraCommand::~DoraCommand() {
     }
+    
+     void DoraCommand::setDoraCmmand(const DoraCommand& pstCmd){
+           mCmdID=pstCmd.mCmdID;
+        memcpy(&mWalkCmd,&(pstCmd.mWalkCmd),sizeof(WalkCommand));
+        mRobotState = pstCmd.mRobotState;
+        int size = pstCmd.mCmdData.size();
+        mCmdData.clear();
+        for(int i =0;i<size;++i){
+         mCmdData.push_back(pstCmd.mCmdData[i]);
+        }
+     }
 
     void DoraCommand::setWalkCmd(WalkCommand& pstWalkCmd) {
         mCmdID = WALK_CMD;
@@ -54,7 +65,18 @@ using namespace std;
         constructCmdData();
     }
 
-    void DoraCommand::TurnInCircle(char pstStepNum) {
+    void DoraCommand::TurnRightInCircle(char pstStepNum) {
+        mCmdID = WALK_CMD;
+        mWalkCmd.x = 0;
+        mWalkCmd.y = 0;
+        mWalkCmd.dir = -10;
+        mWalkCmd.h = 40;
+        mWalkCmd.num = pstStepNum;
+        mRobotState = dora_core::RS_TURN_CIRCLE;
+        constructCmdData();
+    }
+    
+     void DoraCommand::TurnLeftInCircle(char pstStepNum) {
         mCmdID = WALK_CMD;
         mWalkCmd.x = 0;
         mWalkCmd.y = 0;

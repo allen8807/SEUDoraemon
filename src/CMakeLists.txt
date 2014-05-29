@@ -1,25 +1,21 @@
 #SET(AGENT_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/agent")
 
 #ADD_SUBDIRECTORY( libs )
+INCLUDE_DIRECTORIES(./)
 INCLUDE_DIRECTORIES(./libs)
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/libs/RoBoIO/LINUX)
 ADD_SUBDIRECTORY( com )
 ADD_SUBDIRECTORY( perception )
 ADD_SUBDIRECTORY( action )
-#ADD_SUBDIRECTORY( camera )
-#ADD_SUBDIRECTORY( bioloid )
 ADD_SUBDIRECTORY( core )
-INCLUDE_DIRECTORIES(./)
+
 ADD_EXECUTABLE(seuDoraemon main.cpp)
 TARGET_LINK_LIBRARIES(seuDoraemon
-#bioloid
-#camera
 com
-dora_core
 dora_perception
 dora_action
+dora_core
 pthread
-RBIO.a
 )
 SET( CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/bin/")
 INSTALL(TARGETS seuDoraemon 

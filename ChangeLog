@@ -1,3 +1,9 @@
+2012-05-29 23:58 Zhao Bolu<zhaobl880704@gmail.com>
+ V0.6
+DoraemonV0.6
+完成绕桩算法
+其间因为两个类的互相引用一直报错，后来发现是由于编译器在预处理时，无法知道另一个类的大小导致的
+
 2012-05-29 4:18 Zhao Bolu<zhaobl880704@gmail.com>
  V0.5
 DoraemonV0.5
