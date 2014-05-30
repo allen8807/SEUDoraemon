@@ -33,14 +33,14 @@ namespace dora_core {
         }
 
     private:
-
+//避障使用
         Vector2f mFinalTarget;
         std::stack<Vector2f> mPathPlanningTargets;
 
-
+//绕桩使用
         WRP_ST mWalkRoundPostState;
         std::stack<Vector2f> mWalkTargets;
-
+//返回给主控模块的目标点
         Vector2f mLocalTarget;
     };
 }//namespace dora_core 

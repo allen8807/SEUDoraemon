@@ -17,7 +17,7 @@ namespace dora_core {
     using namespace std;
     typedef   struct WMBlocks{
         float widthOffset;//width
-        float foroardOffset;//height
+        float forwardOffset;//height
         float leftDir;
         float rightDir;
     }WMBlocks;

@@ -499,7 +499,7 @@ namespace dora_perception {
             tmp.leftDir = w*widthMaxDir/width - widthMaxDir/2;
             tmp.rightDir = (w+mBlocks[i].width)*widthMaxDir/width - widthMaxDir/2;
             tmp.widthOffset =  w*widthMax/width - widthMax/2;
-            tmp.foroardOffset = h*heightdMax/height + errHeight;
+            tmp.forwardOffset = h*heightdMax/height + errHeight;
             mWMBlocks.push_back(tmp);
         }
       //  MUTI_DATA.setBlocks(mWMBlocks);

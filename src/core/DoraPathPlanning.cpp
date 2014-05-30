@@ -30,7 +30,7 @@ namespace dora_core {
         Vector2f mypos = WM.getMyGlobalPos2D();
         float bodydir = WM.getMyBodyDirection();
         Vector2f tarPol(0.0f, 0.0f);
-        WMBlocks postPol;
+        WMBlocks postPol;//柱子极坐标
         memset(&postPol, 0, sizeof (WMBlocks));
        // cout << "mypos" << mypos << "target" << nowTar << "tarPol" << tarPol << "bodydir" << bodydir << endl;
  //       cout << "tarsize" << mWalkTargets.size() << endl;
@@ -41,7 +41,7 @@ namespace dora_core {
 
         mapsize = blockVec.size();
         for (int i = 0; i < mapsize; ++i) {
-            if (blockVec[i].foroardOffset < 0.8f) {
+            if (blockVec[i].forwardOffset < 0.8f) {
                 isSee = true;
                 memcpy(&postPol, &(blockVec[i]), sizeof (WMBlocks));
                 break;
@@ -114,6 +114,140 @@ namespace dora_core {
     }
 
     void DoraPathPlanning::WalkAvoidBlocks() {
-
+  //1.get target point
+        Vector2f target = mPathPlanningTargets.top();
+         Vector2f mypos =  WM.getMyGlobalPos2D();  
+       float bodydir = WM.getMyBodyDirection();
+       Vector2f tarPol = xyz2pol(target-mypos);
+       
+       tarPol.y() = tarPol.y()-bodydir;
+       Vector2f finalTarPol = xyz2pol(mFinalTarget-mypos);
+       finalTarPol.y() = finalTarPol.y()-bodydir;
+       cout<<"mypos"<<mypos<<"target" <<target <<"tarPol" <<tarPol<<"bodydir"<<bodydir<<endl;
+   cout<<"tarSize"<<mPathPlanningTargets.size()<<endl;
+       //2.check block
+       int mapsize = 0;
+       bool isBlock = false;
+       int blockNum = 0;
+   //     std::map<unsigned int, math::Vector3f> polMap;
+        std::vector<WMBlocks> blockVec = WM.getBlocks();
+    //     if (WM.lastPerception().vision() != NULL) {
+      //     polMap = WM.lastPerception().vision()->getPostGaolPolMap();
+             mapsize= blockVec.size();  
+                for (int i = 0; i < mapsize; ++i) {
+                    if(blockVec[i].forwardOffset>0.8f || blockVec[i].forwardOffset>tarPol.x()){
+                        continue;
+                    }
+                    if (abs((blockVec[i].leftDir+blockVec[i].rightDir)/2- tarPol.y()) < 20.0f) {
+                        isBlock = true;
+                        blockNum = i;
+                        break;
+                    }
+                }
+  //      }
+       
+  //  shared_ptr<Action> act;
+    if(!isBlock){
+//        if(abs(tarPol.x())<0.5f){
+            if(mPathPlanningTargets.size()>1){
+             mPathPlanningTargets.pop();
+            }
+//             cout<<"pop@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"<<endl;
+//        act = goToRel(Vector2f(0.0f, 0.0f), 0.0f);
+//       
+//        }else if(tarPol.y()>5.0f){
+//            act = goToRel(Vector2f(0.0f, 0.0f), 5.0f);
+//        }else if(tarPol.y()<-5.0f){
+//            act = goToRel(Vector2f(0.0f, 0.0f), -5.0f);
+//        }else{
+//            act = goToRel(Vector2f(0.0f, 0.1f), 0.0f);
+//        }
+        this->mLocalTarget = tarPol;
+    //    return act;
+    }else{
+        Vector2f p1(0.0f, 0.0f);
+        Vector2f tmpTarPol(0.0f, 0.0f);
+        int nextBlockNum=blockNum;
+     //   if(1 == mapsize){
+        /*    tmpTarPol.x() = 1.5f;
+            tmpTarPol.y() = tarPol.y();
+            if(finalTarPol.y()>=tmpTarPol.y()){
+               
+                tmpTarPol.y()+=45;
+            }else{
+                 tmpTarPol.y()-=45;
+            }*/
+            tmpTarPol.x() = 1.5f;
+            tmpTarPol.y() = (blockVec[blockNum].leftDir+blockVec[blockNum].rightDir)/2;
+            if(finalTarPol.y()>=tmpTarPol.y()){
+                
+                for(int i = 0;i<mapsize;++i){
+                    if(i!=blockNum && blockVec[i].forwardOffset <=0.8f && 
+                            ((blockVec[i].leftDir+blockVec[i].rightDir)/2
+                            > (blockVec[blockNum].leftDir+blockVec[blockNum].rightDir)/2)){
+                        
+                        if(nextBlockNum != blockNum  &&
+                                ((blockVec[i].leftDir+blockVec[i].rightDir)/2
+                                <  (blockVec[blockNum].leftDir+blockVec[blockNum].rightDir)/2)){
+                            nextBlockNum = i;
+                        }
+                        if(nextBlockNum == blockNum){
+                            nextBlockNum = i;
+                        }
+                    }
+                }
+                if(nextBlockNum != blockNum ){
+                    tmpTarPol.y() =(((blockVec[blockNum].leftDir+blockVec[blockNum].rightDir)/2)
+                            +(blockVec[nextBlockNum].leftDir+blockVec[nextBlockNum].rightDir)/2)/2.0f;
+                    cerr<<"$$$$$$$$$$$##############$$$$$$$$$$$$$$$$$$$"<<endl;
+                }else{
+                tmpTarPol.y()+=45;
+                }
+                
+            }else{
+                  for(int i = 0;i<mapsize;++i){
+                    if(i!=blockNum && blockVec[i].forwardOffset <=0.8f && 
+                           ((blockVec[i].leftDir+blockVec[i].rightDir)/2
+                            < (blockVec[blockNum].leftDir+blockVec[blockNum].rightDir)/2)
+                            
+                            ){
+                        
+                        if(nextBlockNum != blockNum  &&
+                               ((blockVec[i].leftDir+blockVec[i].rightDir)/2
+                                >  (blockVec[blockNum].leftDir+blockVec[blockNum].rightDir)/2)
+                                ){
+                            nextBlockNum = i;
+                        }
+                        if(nextBlockNum == blockNum){
+                            nextBlockNum = i;
+                        }
+                    }
+                }
+                if(nextBlockNum != blockNum ){
+                    tmpTarPol.y() = (((blockVec[blockNum].leftDir+blockVec[blockNum].rightDir)/2)
+                            +(blockVec[nextBlockNum].leftDir+blockVec[nextBlockNum].rightDir)/2)/2.0f;
+                    cerr<<"$$$$$$$$$$#############$$$$$$$$$$$$$$$$$$$$###################"<<endl;
+                }else{
+                tmpTarPol.y()-=45;
+                }
+            }        
+        
+            tmpTarPol.y() += bodydir;
+            p1 = pol2xyz(tmpTarPol);
+            p1.x() +=mypos.x();
+            p1.y() +=mypos.y();
+        //    if(p1.y()>mFinalTarget.y()){
+         //       p1.y()-=0.3f;
+         //   }else{
+         //       p1.y()+=0.3f;
+          //  }
+            while(mPathPlanningTargets.size()>=2){
+                mPathPlanningTargets.pop();
+            }
+            mPathPlanningTargets.push(p1);
+            
+            cout<<"p1"<<p1<<"size"<<mPathPlanningTargets.size() <<endl;
+            return  WalkAvoidBlocks();
+    }
     }
 }//namespace dora_core 
